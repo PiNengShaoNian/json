@@ -23,6 +23,7 @@ enum {
 	LEPT_PARSE_EXPECT_VALUE,
 	LEPT_PARSE_INVALID_VALUE,
 	LEPT_PARSE_ROOT_NOT_SINGULAR,
+	LEPT_PARSE_NUMBER_TOO_BIG
 };
 
 lept_type lept_get_type(const lept_value* v);
