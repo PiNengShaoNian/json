@@ -57,6 +57,19 @@ do {\
 #define EXPECT_EQ_SIZE_T(expect, actual) EXPECT_EQ_BASE((expect) == (actual), (size_t)expect, (size_t)actual, "%zu")
 #endif
 
+#define TEST_ROUNDTRIP(json)\
+    do {\
+        lept_value v;\
+        char* json2;\
+        size_t length;\
+        lept_init(&v);\
+        EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, json));\
+        json2 = lept_stringify(&v, &length);\
+        EXPECT_EQ_STRING(json, json2, length);\
+        lept_free(&v);\
+        free(json2);\
+	} while (0)
+
 
 static void test_parse_number() {
 	TEST_NUMBER(0.0, "0");
@@ -331,6 +344,13 @@ static void test_access() {
 	test_access_number();
 }
 
+static void test_stringify() {
+	TEST_ROUNDTRIP("null");
+	TEST_ROUNDTRIP("false");
+	TEST_ROUNDTRIP("true");
+	/* ... */
+}
+
 int main() {
 #ifdef _WINDOWS
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -338,5 +358,6 @@ int main() {
 
 	test_parse();
 	test_access();
+	test_stringify();
 	printf("%d/%d (%3.2f%%) passed\n", test_pass, test_count, test_pass * 100.0 / test_count);
 }
