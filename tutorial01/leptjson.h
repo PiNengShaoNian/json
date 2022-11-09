@@ -19,7 +19,7 @@ typedef struct lept_member lept_member;
 struct lept_value {
 	union {
 		struct { lept_member* m; size_t size; } o; /* object */
-		struct { lept_value* e; size_t size; } a; /* array */
+		struct { lept_value* e; size_t size; size_t capacity;  } a; /* array */
 		struct { char* s; size_t len; } s;
 		double n;
 	} u;
@@ -53,6 +53,7 @@ enum {
 #define lept_init(v) do { (v)->type = LEPT_NULL;  } while(0)
 #define lept_set_null(v) lept_free(v)
 
+void lept_move(lept_value* dst, lept_value* src);
 void lept_free(lept_value* v);
 
 int lept_get_boolean(const lept_value* v);
@@ -71,6 +72,14 @@ double lept_get_number(const lept_value* v);
 
 size_t lept_get_array_size(const lept_value* v);
 lept_value* lept_get_array_element(const lept_value* v, size_t index);
+void lept_set_array(lept_value* v, size_t capacity);
+size_t lept_get_array_capacity(const lept_value* v);
+lept_value* lept_pushback_array_element(lept_value* v);
+void lept_reserve_array(lept_value* v, size_t capacity);
+void lept_popback_array_element(lept_value* v);
+void lept_erase_array_element(lept_value* v, size_t index, size_t count);
+void lept_shrink_array(lept_value* v);
+void lept_clear_array(lept_value* v);
 
 size_t lept_get_object_size(const lept_value* v);
 const char* lept_get_object_key(const lept_value* v, size_t index);
