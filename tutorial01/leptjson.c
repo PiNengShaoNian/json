@@ -600,7 +600,6 @@ char* lept_stringify(const lept_value* v, size_t* length) {
 	return c.stack;
 }
 
-#define LEPT_KEY_NOT_EXIST ((size_t)-1)
 
 size_t lept_find_object_index(const lept_value* v, const char* key, size_t klen) {
 	size_t i;
@@ -644,3 +643,34 @@ lept_value* lept_find_object_value(const lept_value* v, const char* key, size_t 
 //		break;
 //	}
 //}
+
+void lept_set_object(lept_value* v, size_t capaciy) {
+	assert(v != NULL);
+	lept_free(v);
+	v->type = LEPT_OBJECT;
+	v->u.o.size = 0;
+	v->u.o.capacity = capaciy;
+	v->u.o.m = capaciy > 0 ? (lept_member*)malloc(capaciy * sizeof(lept_member)) : NULL;
+}
+
+size_t lept_get_object_size(const lept_value* v) {
+	assert(v != NULL && v->type == LEPT_OBJECT);
+	return v->u.o.size;
+}
+
+size_t lept_get_object_capacity(const lept_value* v) {
+	assert(v != NULL && v->type == LEPT_OBJECT);
+	/* \todo */
+	return 0;
+}
+
+lept_value* lept_set_object_value(lept_value* v, const char* key, size_t klen) {
+	assert(v != NULL && v->type == LEPT_OBJECT && key != NULL);
+	/* \todo */
+	return NULL;
+}
+
+void lept_remove_object_value(lept_value* v, size_t index) {
+	assert(v != NULL && v->type == LEPT_OBJECT && index < v->u.o.size);
+	/* \todo */
+}

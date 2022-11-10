@@ -18,8 +18,12 @@ typedef struct lept_member lept_member;
 
 struct lept_value {
 	union {
-		struct { lept_member* m; size_t size; } o; /* object */
-		struct { lept_value* e; size_t size; size_t capacity;  } a; /* array */
+		struct {
+			lept_member* m; size_t size; size_t capacity;
+		} o; /* object */
+		struct {
+			lept_value* e; size_t size; size_t capacity;
+		} a; /* array */
 		struct { char* s; size_t len; } s;
 		double n;
 	} u;
@@ -50,6 +54,7 @@ enum {
 	LEPT_PARSE_MISS_COMMA_OR_CURLY_BRACKET
 };
 
+#define LEPT_KEY_NOT_EXIST ((size_t)-1)
 #define lept_init(v) do { (v)->type = LEPT_NULL;  } while(0)
 #define lept_set_null(v) lept_free(v)
 
@@ -85,6 +90,7 @@ size_t lept_get_object_size(const lept_value* v);
 const char* lept_get_object_key(const lept_value* v, size_t index);
 size_t lept_get_object_length(const lept_value* v, size_t index);
 lept_value* lept_get_object_value(const lept_value* v, size_t index);
+void lept_set_object(lept_value* v, size_t capaciy);
 
 char* lept_stringify(const lept_value* v, size_t* length);
 #endif
